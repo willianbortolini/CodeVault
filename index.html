@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Boxes de Texto</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f8f8;
+            margin: 0;
+            padding: 6px;
+            box-sizing: border-box;
+        }
+
+        h1 {
+            font-size: 24px;
+            color: #333;
+            margin: 0;
+        }
+
+        .box {
+            border: 1px solid #ccc;
+            background-color: #fff;
+            padding: 8px;
+            margin-bottom: 5px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+
+        .box-title {
+            font-weight: bold;
+            font-size: 13px;
+            color: #333;
+            margin-top: 0;
+            margin-bottom: 10px;
+        }
+
+        .box-content {
+            color: #666;
+            font-size: 13px;
+            margin: 0;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .action-buttons {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+
+        .action-buttons button {
+            background: none;
+            border: none;
+            margin-left: 5px;
+            cursor: pointer;
+            color: #777;
+            transition: color 0.3s ease-in-out;
+        }
+
+        .action-buttons button:hover {
+            color: #333;
+        }
+
+        .CodeVault{
+            display: flex;
+            justify-content: space-between; 
+            margin-bottom: 4px;
+        }
+
+        .add-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: none;
+            background-color: #333;
+            color: #fff;
+            font-size: 10px;
+            font-weight: bold;
+            padding: 8px 8px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease-in-out;
+        }
+
+        .add-button:hover {
+            background-color: #555;
+        }
+
+        .add-button i {
+            margin-right: 5px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="CodeVault">
+        <h1>CodeVault</h1>
+        <button class="add-button"><i class="fas fa-plus"></i></button>
+    </div>
+    <div id="container"></div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>
+    <script>
+        var addButton = document.querySelector(".add-button");
+        var container = document.getElementById("container");
+        var boxIndex = 1;
+
+        addButton.addEventListener("click", function () {
+            createBox("Título " + boxIndex, "Texto " + boxIndex);
+            boxIndex++;
+        });
+
+        function createBox(title, content) {
+            var box = document.createElement("div");
+            box.className = "box";
+
+            var titleElement = document.createElement("h2");
+            titleElement.className = "box-title";
+            titleElement.innerText = title;
+            titleElement.contentEditable = true;
+            titleElement.addEventListener("click", function (event) {
+                event.stopPropagation();
+                var contentElement = this.nextElementSibling;
+                contentElement.classList.toggle("hidden");
+            });
+            box.appendChild(titleElement);
+
+            var contentElement = document.createElement("p");
+            contentElement.className = "box-content";
+            contentElement.innerText = content;
+            contentElement.contentEditable = true;
+            box.appendChild(contentElement);
+
+            var copyButton = document.createElement("button");
+            copyButton.innerHTML = '<i class="far fa-copy"></i>';
+            copyButton.addEventListener("click", function () {
+                copyToClipboard(contentElement.textContent);
+            });
+
+            var deleteButton = document.createElement("button");
+            deleteButton.innerHTML = '<i class="far fa-trash-alt"></i>';
+            deleteButton.addEventListener("click", function () {
+                container.removeChild(box);
+            });
+
+            var actionButtons = document.createElement("div");
+            actionButtons.className = "action-buttons";
+            actionButtons.appendChild(copyButton);
+            actionButtons.appendChild(deleteButton);
+            box.appendChild(actionButtons);
+
+            container.appendChild(box);
+        }
+
+        function copyToClipboard(text) {
+            var textarea = document.createElement("textarea");
+            textarea.value = text;
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand("copy");
+            document.body.removeChild(textarea);
+            alert("Texto copiado para a área de transferência!");
+        }
+    </script>
+</body>
+
+</html>

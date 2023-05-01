@@ -4,10 +4,11 @@
 <head>
     <title>Boxes de Texto</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f8f8f8;
+            background-color: #252526;
             margin: 0;
             padding: 6px;
             box-sizing: border-box;
@@ -15,30 +16,30 @@
 
         h1 {
             font-size: 24px;
-            color: #333;
+            color: #d4d4d4;
             margin: 0;
         }
 
         .box {
-            border: 1px solid #ccc;
-            background-color: #fff;
+            border: 1px solid #858585;
+            background-color: #1e1e1e;
             padding: 8px;
             margin-bottom: 5px;
             border-radius: 5px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             position: relative;
         }
- 
+
         .box-title {
             font-weight: bold;
             font-size: 13px;
-            color: #333;
+            color: #d4d4d4;
             margin-top: 0;
             margin-bottom: 10px;
         }
 
         .box-content {
-            color: #666;
+            color: #ffffff;
             font-size: 13px;
             margin: 0;
         }
@@ -66,9 +67,9 @@
             color: #333;
         }
 
-        .CodeVault{
-            display: flex;
-            justify-content: space-between; 
+        .CodeVault {
+            display: flex;            
+            justify-content: space-between;
             margin-bottom: 4px;
         }
 
@@ -77,14 +78,30 @@
             align-items: center;
             justify-content: center;
             border: none;
-            background-color: #333;
+            background-color: #a6a4a4;
             color: #fff;
             font-size: 10px;
             font-weight: bold;
-            padding: 8px 8px;
+            padding: 8px 10px;
             border-radius: 8px;
             cursor: pointer;
             transition: background-color 0.3s ease-in-out;
+        }
+
+        .exit-button{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: none;
+            background-color: #dd6060;
+            color: #252526;
+            font-size: 10px;
+            font-weight: bold;
+            padding: 8px 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease-in-out;
+
         }
 
         .add-button:hover {
@@ -101,26 +118,31 @@
     <div class="CodeVault">
         <h1>CodeVault</h1>
         <button class="add-button"><i class="fas fa-plus"></i></button>
+        <button class="exit-button">X</i></button>
     </div>
-    <div id="container"></div>
+    <div id="container" class="dropzone"></div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>
     <script>
         var addButton = document.querySelector(".add-button");
         var container = document.getElementById("container");
-        var boxIndex = 1 ; 
+        var boxIndex = 1;
 
         addButton.addEventListener("click", function () {
-            createBox("Título " + boxIndex, "Texto " + boxIndex);
+            createBox("Título " + boxIndex, "Texto " + boxIndex, "box" + boxIndex);
             boxIndex++;
         });
 
-        function createBox(title, content) {
+        function createBox(title, content, id) {
             var box = document.createElement("div");
             box.className = "box";
-
+            box.id = id;
             var titleElement = document.createElement("h2");
             titleElement.className = "box-title";
+            box.draggable = true;
+            box.addEventListener("dragstart", handleDragStart);
+            box.addEventListener("dragover", handleDragOver);
+            box.addEventListener("drop", handleDrop);
             titleElement.innerText = title;
             titleElement.contentEditable = true;
             titleElement.addEventListener("click", function (event) {
@@ -134,7 +156,7 @@
             contentElement.className = "box-content";
             contentElement.innerText = content;
             contentElement.contentEditable = true;
-            box.appendChild(contentElement);
+            box.appendChild(contentElement);           
 
             var copyButton = document.createElement("button");
             copyButton.innerHTML = '<i class="far fa-copy"></i>';
@@ -154,6 +176,7 @@
             actionButtons.appendChild(deleteButton);
             box.appendChild(actionButtons);
 
+
             container.appendChild(box);
         }
 
@@ -165,6 +188,33 @@
             document.execCommand("copy");
             document.body.removeChild(textarea);
             alert("Texto copiado para a área de transferência!");
+        }
+
+        function handleDragStart(event) {
+            event.dataTransfer.setData("text/plain", event.target.id);
+        }
+
+        function handleDragOver(event) {
+            event.preventDefault();
+        }
+
+        function handleDrop(event) {
+            event.preventDefault();
+            var sourceBoxId = event.dataTransfer.getData("text/plain");
+            var sourceBox = document.getElementById(sourceBoxId);
+            var targetBox = event.target.closest(".box");
+            console.log(sourceBoxId);
+            if (sourceBox && targetBox) {
+                var container = targetBox.parentNode;
+                var sourceBoxIndex = Array.from(container.children).indexOf(sourceBox);
+                var targetBoxIndex = Array.from(container.children).indexOf(targetBox);
+
+                if (sourceBoxIndex < targetBoxIndex) {
+                    container.insertBefore(sourceBox, targetBox.nextSibling);
+                } else {
+                    container.insertBefore(sourceBox, targetBox);
+                }
+            }
         }
     </script>
 </body>

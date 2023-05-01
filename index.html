@@ -3,15 +3,12 @@
 
 <head>
     <title>Boxes de Texto</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-    
     <style>
         body {
             font-family: Arial, sans-serif;
             background-color: #252526;
-            margin: 0;
-            padding: 6px;
-            box-sizing: border-box;
+            margin: 0;            
+            box-sizing: border-box;            
         }
 
         h1 {
@@ -68,41 +65,27 @@
         }
 
         .CodeVault {
-            display: flex;            
+            display: flex;
             justify-content: space-between;
             margin-bottom: 4px;
+            -webkit-app-region: drag;
         }
 
         .add-button {
+            -webkit-app-region: no-drag;
             display: flex;
             align-items: center;
             justify-content: center;
             border: none;
-            background-color: #a6a4a4;
-            color: #fff;
-            font-size: 10px;
-            font-weight: bold;
-            padding: 8px 10px;
-            border-radius: 8px;
+            background-color: #2f3241;
+            color: #74b1be;
+            font-size: 18px;
+            font-family: emoji;
+            padding: 7px 20px;
             cursor: pointer;
             transition: background-color 0.3s ease-in-out;
         }
-
-        .exit-button{
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: none;
-            background-color: #dd6060;
-            color: #252526;
-            font-size: 10px;
-            font-weight: bold;
-            padding: 8px 10px;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: background-color 0.3s ease-in-out;
-
-        }
+        
 
         .add-button:hover {
             background-color: #555;
@@ -111,19 +94,31 @@
         .add-button i {
             margin-right: 5px;
         }
+
+        #barraMenu{
+            width: 90px;
+        }
+
+        #container{
+            padding: 6px;
+        }
     </style>
 </head>
 
 <body>
-    <div class="CodeVault">
-        <h1>CodeVault</h1>
-        <button class="add-button"><i class="fas fa-plus"></i></button>
-        <button class="exit-button">X</i></button>
+    <div class="CodeVault" id="customTitleBar">
+        
+        <button class="add-button">+</button>
+        <div id="barraMenu"></div>
     </div>
+
     <div id="container" class="dropzone"></div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>
+    
     <script>
+       
+
         var addButton = document.querySelector(".add-button");
         var container = document.getElementById("container");
         var boxIndex = 1;
@@ -156,7 +151,7 @@
             contentElement.className = "box-content";
             contentElement.innerText = content;
             contentElement.contentEditable = true;
-            box.appendChild(contentElement);           
+            box.appendChild(contentElement);
 
             var copyButton = document.createElement("button");
             copyButton.innerHTML = '<i class="far fa-copy"></i>';
@@ -215,7 +210,11 @@
                     container.insertBefore(sourceBox, targetBox);
                 }
             }
+
+
         }
+
+       
     </script>
 </body>
 

@@ -1,0 +1,25 @@
+{
+  "name": "codevault",
+  "version": "1.0.0",
+  "build": {
+    "appId": "com.example.myapp",
+    "asar": true,
+    "win": {
+      "target": "nsis",
+      "asarUnpack": "*.exe"
+    }
+  },
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "author": "Willian Ricardo Bortolini",
+  "license": "ISC",
+  "dependencies": {
+    "electon": "^0.0.1-security"
+  },
+  "devDependencies": {
+    "electron": "^24.1.3"
+  }
+}

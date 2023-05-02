@@ -7,16 +7,16 @@
         body {
             font-family: Arial, sans-serif;
             background-color: #252526;
-            margin: 0;            
-            box-sizing: border-box;            
+            margin: 0;
+            box-sizing: border-box;
         }
-
+        
         h1 {
             font-size: 24px;
             color: #d4d4d4;
             margin: 0;
         }
-
+        
         .box {
             border: 1px solid #858585;
             background-color: #1e1e1e;
@@ -26,31 +26,34 @@
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             position: relative;
         }
-
+        
         .box-title {
             font-weight: bold;
             font-size: 13px;
             color: #d4d4d4;
             margin-top: 0;
             margin-bottom: 10px;
+            width: 60%;
+            font-family: monospace;
         }
-
+        
         .box-content {
             color: #ffffff;
             font-size: 13px;
             margin: 0;
+            font-family: monospace;
         }
-
+        
         .hidden {
             display: none;
         }
-
+        
         .action-buttons {
             position: absolute;
             top: 10px;
             right: 10px;
         }
-
+        
         .action-buttons button {
             background: none;
             border: none;
@@ -59,18 +62,18 @@
             color: #777;
             transition: color 0.3s ease-in-out;
         }
-
+        
         .action-buttons button:hover {
             color: #333;
         }
-
+        
         .CodeVault {
             display: flex;
             justify-content: space-between;
             margin-bottom: 4px;
             -webkit-app-region: drag;
         }
-
+        
         .add-button {
             -webkit-app-region: no-drag;
             display: flex;
@@ -86,20 +89,19 @@
             transition: background-color 0.3s ease-in-out;
         }
         
-
         .add-button:hover {
             background-color: #555;
         }
-
+        
         .add-button i {
             margin-right: 5px;
         }
-
-        #barraMenu{
+        
+        #barraMenu {
             width: 90px;
         }
-
-        #container{
+        
+        #container {
             padding: 6px;
         }
     </style>
@@ -107,7 +109,6 @@
 
 <body>
     <div class="CodeVault" id="customTitleBar">
-        
         <button class="add-button">+</button>
         <div id="barraMenu"></div>
     </div>
@@ -115,15 +116,13 @@
     <div id="container" class="dropzone"></div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>
-    
-    <script>
-       
 
+    <script>
         var addButton = document.querySelector(".add-button");
         var container = document.getElementById("container");
         var boxIndex = 1;
 
-        addButton.addEventListener("click", function () {
+        addButton.addEventListener("click", function() {
             createBox("Título " + boxIndex, "Texto " + boxIndex, "box" + boxIndex);
             boxIndex++;
         });
@@ -140,12 +139,19 @@
             box.addEventListener("drop", handleDrop);
             titleElement.innerText = title;
             titleElement.contentEditable = true;
-            titleElement.addEventListener("click", function (event) {
+            titleElement.addEventListener("click", function(event) {
                 event.stopPropagation();
                 var contentElement = this.nextElementSibling;
                 contentElement.classList.toggle("hidden");
             });
             box.appendChild(titleElement);
+
+            titleElement.addEventListener("paste", function(event) {
+                event.preventDefault();
+                var clipboardData = event.clipboardData || window.clipboardData;
+                var pastedText = clipboardData.getData("text/plain");
+                document.execCommand("insertText", false, pastedText);
+            });
 
             var contentElement = document.createElement("p");
             contentElement.className = "box-content";
@@ -153,15 +159,22 @@
             contentElement.contentEditable = true;
             box.appendChild(contentElement);
 
+            contentElement.addEventListener("paste", function(event) {
+                event.preventDefault();
+                var clipboardData = event.clipboardData || window.clipboardData;
+                var pastedText = clipboardData.getData("text/plain");
+                document.execCommand("insertText", false, pastedText);
+            });
+
             var copyButton = document.createElement("button");
             copyButton.innerHTML = '<i class="far fa-copy"></i>';
-            copyButton.addEventListener("click", function () {
+            copyButton.addEventListener("click", function() {
                 copyToClipboard(contentElement.textContent);
             });
 
             var deleteButton = document.createElement("button");
             deleteButton.innerHTML = '<i class="far fa-trash-alt"></i>';
-            deleteButton.addEventListener("click", function () {
+            deleteButton.addEventListener("click", function() {
                 container.removeChild(box);
             });
 
@@ -170,7 +183,6 @@
             actionButtons.appendChild(copyButton);
             actionButtons.appendChild(deleteButton);
             box.appendChild(actionButtons);
-
 
             container.appendChild(box);
         }
@@ -201,8 +213,12 @@
             console.log(sourceBoxId);
             if (sourceBox && targetBox) {
                 var container = targetBox.parentNode;
-                var sourceBoxIndex = Array.from(container.children).indexOf(sourceBox);
-                var targetBoxIndex = Array.from(container.children).indexOf(targetBox);
+                var sourceBoxIndex = Array.from(container.children).indexOf(
+                    sourceBox
+                );
+                var targetBoxIndex = Array.from(container.children).indexOf(
+                    targetBox
+                );
 
                 if (sourceBoxIndex < targetBoxIndex) {
                     container.insertBefore(sourceBox, targetBox.nextSibling);
@@ -210,11 +226,7 @@
                     container.insertBefore(sourceBox, targetBox);
                 }
             }
-
-
         }
-
-       
     </script>
 </body>
 

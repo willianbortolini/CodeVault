@@ -18,6 +18,7 @@
 /.idea/
 /dist/
 node_modules/
+Codevault-win32-x64/
 SHASUMS256.txt
 **/package-lock.json
 compile_commands.json

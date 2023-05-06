@@ -1,38 +1,42 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Boxes de Texto</title>
-    <style>
+    <style> 
         body {
             font-family: Arial, sans-serif;
             background-color: #252526;
             margin: 0;
             box-sizing: border-box;
         }
-        
+
         body::-webkit-scrollbar {
             width: 0.3em;
             /* Largura da barra de rolagem */
         }
-        
+
         body::-webkit-scrollbar-thumb {
             background-color: #74b1be;
             border-radius: 0.15em;
             /* Cor do polegar da barra de rolagem */
         }
-        
+
         body::-webkit-scrollbar-track {
             background-color: #252526;
             /* Cor de fundo da barra de rolagem */
         }
-        
+
         h1 {
             font-size: 24px;
             color: #d4d4d4;
             margin: 0;
         }
-        
+
         .box {
             border: 1px solid #858585;
             background-color: #1e1e1e;
@@ -41,7 +45,7 @@
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             position: relative;
         }
-        
+
         .box-title {
             font-weight: bold;
             font-size: 13px;
@@ -51,7 +55,7 @@
             width: 60%;
             font-family: monospace;
         }
-        
+
         .box-content {
             color: #ffffff;
             background-color: #1e1e1e;
@@ -64,19 +68,19 @@
             min-height: 100px;
             /* Defina a altura mínima desejada */
             overflow-y: auto;
-            resize: vertical;
+            resize: vertical;            
         }
-        
+
         .hidden {
             display: none;
         }
-        
+
         .action-buttons {
             position: absolute;
             top: 10px;
             right: 10px;
         }
-        
+
         .action-buttons button {
             background: none;
             border: none;
@@ -85,18 +89,18 @@
             color: #777;
             transition: color 0.3s ease-in-out;
         }
-        
+
         .action-buttons button:hover {
             color: #333;
         }
-        
+
         .CodeVault {
             display: flex;
             justify-content: space-between;
             margin-bottom: 4px;
             -webkit-app-region: drag;
         }
-        
+
         .add-button {
             -webkit-app-region: no-drag;
             display: flex;
@@ -107,23 +111,23 @@
             color: #74b1be;
             font-size: 18px;
             font-family: emoji;
-            padding: 7px 20px;
+            padding: 6px 19px;
             cursor: pointer;
             transition: background-color 0.3s ease-in-out;
         }
-        
+
         .add-button:hover {
             background-color: #555;
         }
-        
+
         .add-button i {
             margin-right: 5px;
         }
-        
+
         #barraMenu {
             width: 90px;
         }
-        
+
         #container {
             padding: 6px;
         }
@@ -145,7 +149,7 @@
         var container = document.getElementById("container");
         var boxIndex = 1;
 
-        addButton.addEventListener("click", function() {
+        addButton.addEventListener("click", function () {
             createBox("Título " + boxIndex, "Texto " + boxIndex, "box" + boxIndex);
             boxIndex++;
         });
@@ -153,23 +157,23 @@
         function createBox(title, content, id) {
             var box = document.createElement("div");
             box.className = "box";
-            box.id = id;
             var titleElement = document.createElement("h2");
+            titleElement.id = id;
             titleElement.className = "box-title";
-            box.draggable = true;
+            titleElement.draggable = true;
             box.addEventListener("dragstart", handleDragStart);
             box.addEventListener("dragover", handleDragOver);
             box.addEventListener("drop", handleDrop);
             titleElement.innerText = title;
             titleElement.contentEditable = true;
-            titleElement.addEventListener("click", function(event) {
+            titleElement.addEventListener("click", function (event) {
                 event.stopPropagation();
                 var contentElement = this.nextElementSibling;
                 contentElement.classList.toggle("hidden");
             });
             box.appendChild(titleElement);
 
-            titleElement.addEventListener("paste", function(event) {
+            titleElement.addEventListener("paste", function (event) {
                 event.preventDefault();
                 var clipboardData = event.clipboardData || window.clipboardData;
                 var pastedText = clipboardData.getData("text/plain");
@@ -182,7 +186,7 @@
             contentElement.contentEditable = true;
             box.appendChild(contentElement);
 
-            contentElement.addEventListener("input", function() {
+            contentElement.addEventListener("input", function () {
                 adjustTextareaHeight(contentElement);
             });
 
@@ -191,7 +195,7 @@
                 textarea.style.height = textarea.scrollHeight + "px";
             }
 
-            contentElement.addEventListener("paste", function(event) {
+            contentElement.addEventListener("paste", function (event) {
                 event.preventDefault();
                 var clipboardData = event.clipboardData || window.clipboardData;
                 var pastedText = clipboardData.getData("text/plain");
@@ -200,13 +204,13 @@
 
             var copyButton = document.createElement("button");
             copyButton.innerHTML = '<i class="far fa-copy"></i>';
-            copyButton.addEventListener("click", function() {
+            copyButton.addEventListener("click", function () {
                 copyToClipboard(contentElement.textContent);
             });
 
             var deleteButton = document.createElement("button");
             deleteButton.innerHTML = '<i class="far fa-trash-alt"></i>';
-            deleteButton.addEventListener("click", function() {
+            deleteButton.addEventListener("click", function () {
                 container.removeChild(box);
             });
 
@@ -216,7 +220,7 @@
             actionButtons.appendChild(deleteButton);
             box.appendChild(actionButtons);
 
-            container.appendChild(box);
+            container.insertBefore(box, container.firstChild);
         }
 
         function copyToClipboard(text) {
@@ -239,7 +243,7 @@
         function handleDrop(event) {
             event.preventDefault();
             var sourceBoxId = event.dataTransfer.getData("text/plain");
-            var sourceBox = document.getElementById(sourceBoxId);
+            var sourceBox = document.getElementById(sourceBoxId).parentNode;
             var targetBox = event.target.closest(".box");
             console.log(sourceBoxId);
             if (sourceBox && targetBox) {

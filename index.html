@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Boxes de Texto</title>
-    <style> 
+    <style>
         body {
             font-family: Arial, sans-serif;
             background-color: #252526;
@@ -68,7 +68,7 @@
             min-height: 100px;
             /* Defina a altura mínima desejada */
             overflow-y: auto;
-            resize: vertical;            
+            resize: vertical;
         }
 
         .hidden {
@@ -148,13 +148,38 @@
         var addButton = document.querySelector(".add-button");
         var container = document.getElementById("container");
         var boxIndex = 1;
+        const { sendToMain } = window.myAPI;
+        const { create } = window.myAPI;
+        
+
+        /*function generateJSON() {
+            var boxes = document.getElementsByClassName("box");
+            var jsonData = [];
+
+            for (var i = 0; i < boxes.length; i++) {
+                var box = boxes[i];
+                var titleElement = box.querySelector(".box-title");
+                var contentElement = box.querySelector(".box-content");
+
+                var boxData = {
+                    title: titleElement.innerText,
+                    content: contentElement.value
+                };
+
+                jsonData.push(boxData);
+            }
+            //console.log(JSON.stringify(jsonData));
+            sendToMain(jsonData);
+        }*/
 
         addButton.addEventListener("click", function () {
-            createBox("Título " + boxIndex, "Texto " + boxIndex, "box" + boxIndex);
-            boxIndex++;
+            create("Título " + boxIndex, "Texto " + boxIndex);
+            //createBox("Título " + boxIndex, "Texto " + boxIndex, "box" + boxIndex);
+            //boxIndex++;
         });
 
-        function createBox(title, content, id) {
+        
+        /*function createBox(title, content, id) {
             var box = document.createElement("div");
             box.className = "box";
             var titleElement = document.createElement("h2");
@@ -173,6 +198,9 @@
             });
             box.appendChild(titleElement);
 
+            titleElement.addEventListener("input", function () {
+                generateJSON();
+            })
             titleElement.addEventListener("paste", function (event) {
                 event.preventDefault();
                 var clipboardData = event.clipboardData || window.clipboardData;
@@ -188,6 +216,7 @@
 
             contentElement.addEventListener("input", function () {
                 adjustTextareaHeight(contentElement);
+                generateJSON();
             });
 
             function adjustTextareaHeight(textarea) {
@@ -261,7 +290,7 @@
                     container.insertBefore(sourceBox, targetBox);
                 }
             }
-        }
+        }*/
     </script>
 </body>
 

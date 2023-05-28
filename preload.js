@@ -10,8 +10,8 @@ contextBridge.exposeInMainWorld('myAPI', {
         ipcRenderer.on(channel, (event, ...args) => callback(...args));
     },
 
-    create: (title, content) =>{
-        idBox ++;
+    create: (title, content) => {
+        idBox++;
         createBox(title, content, idBox);
     }
 
@@ -28,9 +28,9 @@ ipcRenderer.on('auto_save_content', (event, datas) => {
     for (let i = 0; i < data.length; i++) {
         const { title, content } = data[i];
         idBox = i;
-        createBox(title, content, i);        
+        createBox(title, content, i);
     }
-    
+
 });
 
 
@@ -45,11 +45,19 @@ function createBox(title, content, id) {
     box.addEventListener("dragover", handleDragOver);
     box.addEventListener("drop", handleDrop);
     titleElement.innerText = title;
-    titleElement.contentEditable = true;
+    titleElement.contentEditable = false;
     titleElement.addEventListener("click", function (event) {
         event.stopPropagation();
         var contentElement = this.nextElementSibling;
         contentElement.classList.toggle("hidden");
+    });
+    titleElement.addEventListener("dblclick", function (event) {
+        event.stopPropagation();
+        titleElement.contentEditable = true;
+        titleElement.focus();
+    });
+    titleElement.addEventListener("blur", function () {
+        titleElement.contentEditable = false;
     });
     box.appendChild(titleElement);
 
